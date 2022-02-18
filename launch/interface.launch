@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- <include file="$(find cloud_transformer)/launch/cloud_transformer.launch" /> -->
+    <arg name="data_path" default="$(find shimizu_reloc)/data"/>
+    <node pkg="cloud_assembler" type="interface_reloc" name="interface_reloc" output="screen">
+        <param name="map_filename" value="$(arg data_path)/initial_map.pcd"/>
+        <param name="downsample_resolution" value="0.1"/>
+        <param name="MaxCorrespondenceDistance" value="0.5"/>
+        <param name="optimized_transform_filename" value="$(arg data_path)/optimized_transform_interface.txt"/>
+        <param name="use_superodom" value="true"/>
+        <remap from="/scan" to="/uav1/os_hori/os_cloud_node/points"/>
+        <remap from="/registered_scan" to="/velodyne_cloud_registered_imu"/>
+    </node>
+    <!-- <node pkg="rosbag" type="play" name="player" output="screen" args="clock -r 0.3 /home/shimizu/reloc_bags/left2_front2_yaw45.bag"/> -->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find shimizu_reloc)/rviz/reloc_interface.rviz" />
+</launch>

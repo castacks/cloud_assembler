@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- <include file="$(find cloud_transformer)/launch/cloud_transformer.launch" /> -->
+    <arg name="data_path" default="$(find cloud_assembler)/data"/>
+    <node pkg="cloud_assembler" type="main_assembler_node" name="main_assembler" output="screen">
+        <param name="map_filename" value="$(arg data_path)/hawkins_map.ply"/>
+        <param name="downsample_resolution" value="0.2"/>
+        <param name="MaxCorrespondenceDistance" value="0.5"/>
+        <param name="overall_pcl_filename" value="$(arg data_path)/overall_pcl.pcd"/>
+        <param name="marker_scale" value="6"/>
+    </node>
+    <node pkg="cloud_assembler" type="piece_locator_node" name="piece_locator_1" output="screen">
+        <param name="piece_filename" value="$(arg data_path)/shifted_hawkins.ply"/>
+        <param name="downsample_resolution" value="0.2"/>
+        <param name="MaxCorrespondenceDistance" value="0.5"/>
+    </node>
+    <node pkg="cloud_assembler" type="piece_locator_node" name="piece_locator_2" output="screen">
+        <param name="piece_filename" value="$(arg data_path)/hawkins_piece_2.ply"/>
+        <param name="downsample_resolution" value="0.2"/>
+        <param name="MaxCorrespondenceDistance" value="0.5"/>
+    </node>
+    <!-- <node pkg="rosbag" type="play" name="player" output="screen" args="clock -r 0.3 /home/shimizu/reloc_bags/left2_front2_yaw45.bag"/> -->
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find cloud_assembler)/rviz/assemble_interface.rviz" />
+</launch>
